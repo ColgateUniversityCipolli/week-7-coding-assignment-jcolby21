@@ -49,8 +49,29 @@ pois.prob <- function(x, lambda, type="<=") {
     for a beta distribution. Enable the user to specify the shape parameters
     $\alpha$ and $\beta$.
 <<size="scriptsize">>=
-beta.prob <- function(x, size, prob, type="<="){
-  # Use dbeta and pbeta to conditionally return the correct probability
+beta.prob <- function(x, alpha, beta, type="<=") {
+  
+  # Calculate the probability based on the specified type
+  if (type == "=") {
+    # P(X = x) is the PDF at x, which is 0 since beta distribution is continuous
+    return(0)
+  }
+  else if (type == "<") {
+    # P(X < x) is the CDF at x P(X=x)=0 so "<" = "<="
+    return(pbeta(x, shape1 = alpha, shape2 = beta))
+  }
+  else if (type == "<=") {
+    # P(X <= x) is the CDF at x
+    return(pbeta(x, shape1 = alpha, shape2 = beta))
+  }
+  else if (type == ">") {
+    # P(X > x) is 1 minus the CDF at x
+    return(1 - pbeta(x, shape1 = alpha, shape2 = beta))
+  }
+  else if (type == ">=") {
+    # P(X >= x) is 1 minus the CDF at x since ">=" and ">" are equal
+    return(1 - pbeta(x, shape1 = alpha, shape2 = beta))
+  }
 }
 @
 \end{enumerate}

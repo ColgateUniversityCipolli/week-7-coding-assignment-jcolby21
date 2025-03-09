@@ -105,8 +105,29 @@
 \begin{knitrout}\scriptsize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hldef{beta.prob} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{,} \hlkwc{size}\hldef{,} \hlkwc{prob}\hldef{,} \hlkwc{type}\hldef{=}\hlsng{"<="}\hldef{)\{}
-  \hlcom{# Use dbeta and pbeta to conditionally return the correct probability}
+\hldef{beta.prob} \hlkwb{<-} \hlkwa{function}\hldef{(}\hlkwc{x}\hldef{,} \hlkwc{alpha}\hldef{,} \hlkwc{beta}\hldef{,} \hlkwc{type}\hldef{=}\hlsng{"<="}\hldef{) \{}
+
+  \hlcom{# Calculate the probability based on the specified type}
+  \hlkwa{if} \hldef{(type} \hlopt{==} \hlsng{"="}\hldef{) \{}
+    \hlcom{# P(X = x) is the PDF at x, which is 0 since beta distribution is continuous}
+    \hlkwd{return}\hldef{(}\hlnum{0}\hldef{)}
+  \hldef{\}}
+  \hlkwa{else if} \hldef{(type} \hlopt{==} \hlsng{"<"}\hldef{) \{}
+    \hlcom{# P(X < x) is the CDF at x P(X=x)=0 so "<" = "<="}
+    \hlkwd{return}\hldef{(}\hlkwd{pbeta}\hldef{(x,} \hlkwc{shape1} \hldef{= alpha,} \hlkwc{shape2} \hldef{= beta))}
+  \hldef{\}}
+  \hlkwa{else if} \hldef{(type} \hlopt{==} \hlsng{"<="}\hldef{) \{}
+    \hlcom{# P(X <= x) is the CDF at x}
+    \hlkwd{return}\hldef{(}\hlkwd{pbeta}\hldef{(x,} \hlkwc{shape1} \hldef{= alpha,} \hlkwc{shape2} \hldef{= beta))}
+  \hldef{\}}
+  \hlkwa{else if} \hldef{(type} \hlopt{==} \hlsng{">"}\hldef{) \{}
+    \hlcom{# P(X > x) is 1 minus the CDF at x}
+    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{pbeta}\hldef{(x,} \hlkwc{shape1} \hldef{= alpha,} \hlkwc{shape2} \hldef{= beta))}
+  \hldef{\}}
+  \hlkwa{else if} \hldef{(type} \hlopt{==} \hlsng{">="}\hldef{) \{}
+    \hlcom{# P(X >= x) is 1 minus the CDF at x since ">=" and ">" are equal}
+    \hlkwd{return}\hldef{(}\hlnum{1} \hlopt{-} \hlkwd{pbeta}\hldef{(x,} \hlkwc{shape1} \hldef{= alpha,} \hlkwc{shape2} \hldef{= beta))}
+  \hldef{\}}
 \hldef{\}}
 \end{alltt}
 \end{kframe}
